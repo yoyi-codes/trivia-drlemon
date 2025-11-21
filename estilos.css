@@ -1,0 +1,570 @@
+/* --- CARGA DE FUENTE --- */
+@font-face {
+    font-family: 'Lucidity';
+    src: url('fuentes/lucidity-psych.ttf') format('truetype');
+}
+
+/* --- ESTILOS GENERALES --- */
+body {
+    margin: 0;
+    background-color: #000;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+    transition: background-image 0.5s ease-in-out;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.fondo-portada {
+    background-image: url('multimedia/background-portada.png');
+}
+
+.fondo-juego {
+    background-image: url('multimedia/background-preguntas.png');
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 10px 20px;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* --- TÍTULO PORTADA --- */
+.titulo-custom {
+    font-family: 'Lucidity', sans-serif;
+    color: #FFE600;
+    font-size: 60px;
+    line-height: 1;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    text-shadow: 4px 4px 0px #FF00C8, 0 0 20px rgba(255, 230, 0, 0.5);
+    transform: rotate(-2deg);
+    animation: floatTitle 3s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+    .titulo-custom {
+        font-size: 100px;
+    }
+}
+
+@keyframes floatTitle {
+
+    0%,
+    100% {
+        transform: rotate(-2deg) translateY(0);
+    }
+
+    50% {
+        transform: rotate(-2deg) translateY(-10px);
+    }
+}
+
+/* --- INTRO BOX --- */
+.intro-box {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 25px;
+    border-radius: 20px;
+    margin: 20px auto;
+    max-width: 650px;
+    border: 3px solid #00FF73;
+    box-shadow: 0 0 15px rgba(0, 255, 115, 0.3);
+    animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+    0% {
+        box-shadow: 0 0 15px rgba(0, 255, 115, 0.3);
+        border-color: #00FF73;
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(0, 255, 115, 0.8), inset 0 0 10px rgba(0, 255, 115, 0.5);
+        border-color: #80FFC0;
+        transform: scale(1.01);
+    }
+
+    100% {
+        box-shadow: 0 0 15px rgba(0, 255, 115, 0.3);
+        border-color: #00FF73;
+    }
+}
+
+.intro-text {
+    font-size: 18px;
+    line-height: 1.4;
+    color: #eee;
+}
+
+/* --- DECORACIONES --- */
+.decoracion {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.img-manolata {
+    left: -50px;
+    bottom: -20px;
+    width: 280px;
+    max-width: 35vw;
+    animation: slideInLeft 1s ease-out;
+}
+
+.img-sun {
+    right: 10px;
+    top: 20px;
+    width: 150px;
+    max-width: 25vw;
+    animation: spin 20s linear infinite;
+}
+
+/* --- ELEMENTOS DEL JUEGO --- */
+.seccion {
+    display: none;
+    width: 100%;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.seccion.activa {
+    display: block;
+}
+
+.btn-accion {
+    background: #00FF73;
+    color: #000;
+    border: none;
+    padding: 15px 50px;
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 0 15px #00FF73;
+    transition: transform 0.2s;
+    animation: btnPulse 1.5s infinite;
+}
+
+.btn-accion:hover {
+    transform: scale(1.05);
+}
+
+.question-bubble {
+    background: #FFE600;
+    color: #000;
+    font-weight: bold;
+    padding: 20px;
+    border-radius: 20px;
+    font-size: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px #FFE600;
+}
+
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+/* ESTILOS PARA OPCIONES DE TEXTO */
+.option {
+    background: #FF4EDB;
+    color: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.option:hover {
+    transform: translateX(5px);
+    border-color: #fff;
+}
+
+.correct {
+    background: #00FF73 !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px #00FF73;
+}
+
+.incorrect {
+    background: #FF3434 !important;
+    color: #fff !important;
+    opacity: 0.8;
+}
+
+/* --- ESTILOS NUEVOS: OPCIONES CON IMÁGENES (LATAS/LOGOS) --- */
+
+.options-grid.imagenes {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.img-opcion {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* TAMAÑO AUMENTADO */
+    height: 230px;
+    width: auto;
+    object-fit: contain;
+
+    /* FONDO Y BORDE REDONDEADO (SUTIL INICIALMENTE) */
+    padding: 10px;
+    border-radius: 30px;
+    /* Borde radios como pediste */
+    background: rgba(218, 170, 14, 0.05);
+    /* Fondo casi invisible */
+    border: 1px solid transparent;
+    max-width: 200px;
+}
+
+/* Efecto POP al pasar el mouse */
+.img-opcion:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.15);
+    /* Se ilumina el fondo un poco */
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
+    /* Resplandor amarillo suave */
+}
+
+/* Cuando es correcta (NEON VERDE + BORDE REDONDEADO) */
+.img-opcion.correct {
+    background: rgba(0, 255, 115, 0.2);
+    /* Fondo verde transparente */
+    border: 3px solid #00FF73;
+    /* Borde neón */
+    box-shadow: 0 0 25px #00FF73, inset 0 0 15px rgba(0, 255, 115, 0.5);
+    /* Desenfoque gaussiano (glow) */
+    transform: scale(1.1);
+}
+
+/* Cuando es incorrecta (ROJO y opaca) */
+.img-opcion.incorrect {
+    filter: grayscale(100%);
+    background: rgba(255, 52, 52, 0.2);
+    border: 3px solid #FF3434;
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+
+.feedback-msg {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    min-height: 50px;
+    text-shadow: 0 0 5px #000;
+}
+
+/* --- HEADER DEL JUEGO --- */
+.game-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    flex-wrap: nowrap;
+    margin-bottom: -80px;
+    position: relative;
+    z-index: 2;
+}
+
+.header-txt {
+    font-family: 'Lucidity', sans-serif;
+    font-size: 80px;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.txt-green {
+    color: #00FF73;
+    text-shadow: 0 0 10px rgba(0, 255, 115, 0.5);
+}
+
+.txt-white {
+    color: #FFF;
+    font-size: 50px;
+    margin: 0 10px;
+    padding-left: 2rem;
+}
+
+.header-logo-img {
+    height: 350px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    margin-left: -60px;
+    margin-right: -60px;
+    top: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- ESTILOS PANTALLA FINAL --- */
+#titulo-final {
+    font-family: 'Lucidity', sans-serif;
+    color: #00FF73;
+    font-size: 150px;
+    line-height: 0.9;
+    margin-bottom: 80px;
+    text-shadow: 0 0 20px rgba(0, 255, 115, 0.6), 4px 4px 0 #FF00C8;
+    animation: floatTitle 2s infinite ease-in-out;
+}
+
+/* --- ANIMACIÓN GANADORA --- */
+#animacion-ganadora {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.hand-container {
+    position: relative;
+    width: 300px;
+    height: 400px;
+}
+
+.hand-img {
+    width: 200px;
+    position: absolute;
+    top: -300px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: handEnter 0.8s forwards ease-out;
+}
+
+.lemon-drop {
+    width: 80px;
+    position: absolute;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: dropLemon 1s 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes handEnter {
+    to {
+        top: 0px;
+    }
+}
+
+@keyframes dropLemon {
+    0% {
+        top: -100px;
+        opacity: 0;
+        transform: translateX(-50%) rotate(0deg);
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        top: 90px;
+        transform: translateX(-50%) rotate(360deg);
+    }
+
+    100% {
+        top: 80px;
+        opacity: 1;
+        transform: translateX(-50%) rotate(360deg);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-200px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes btnPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* 1. AJUSTE DE LA PORTADA */
+    .titulo-custom {
+        font-size: 50px;
+        margin-bottom: 20px;
+    }
+
+    .intro-box {
+        padding: 20px;
+        width: 85%;
+    }
+
+    .intro-text {
+        font-size: 16px;
+    }
+
+    /* 2. AJUSTE DEL HEADER DEL JUEGO (VERTICAL) */
+    .game-header {
+        flex-direction: column;
+        /* Quitamos márgenes grandes para que se pegue más a la pregunta */
+        margin-bottom: 5px; 
+        margin-top: 0px;
+        gap: 0px;
+    }
+
+    .header-txt {
+        font-size: 55px; 
+        text-align: center;
+    }
+
+    .txt-white {
+        font-size: 30px; 
+        margin: 0;
+        padding: 0;
+    }
+
+    .header-logo-img {
+        height: auto; 
+        width: 200px; 
+        max-width: 60%; 
+        margin: 0;
+        top: -65px;
+    }
+
+    /* 3. AJUSTE DE LAS PREGUNTAS - MÁS PEGADO ARRIBA */
+    .question-bubble {
+        font-size: 18px;
+        padding: 15px;
+        /* Reducimos el margen superior para que suba y se acerque al header */
+        margin-top: -120px; 
+        margin-bottom: 20px;
+    }
+
+    /* 4. OPCIONES DE IMÁGENES (LATAS) EN MÓVIL */
+    .options-grid.imagenes {
+        gap: 15px;
+    }
+
+    .img-opcion {
+        height: 130px; 
+        padding: 8px;
+        max-width: 45%; 
+    }
+
+    /* 5. DECORACIONES (Fondo) */
+    /* Mantenemos las nubes en su lugar (absolute bottom) */
+    .img-manolata {
+        width: 150px;
+        left: -30px;
+        bottom: -10px;
+        opacity: 0.5;
+    }
+
+    .img-sun {
+        width: 90px;
+        top: 10px;
+    }
+
+    /* --- ESTILOS PANTALLA FINAL --- */
+#titulo-final {
+    font-family: 'Lucidity', sans-serif;
+    color: #00FF73;
+    font-size: 80px;
+    line-height: 0.9;
+    margin-bottom: 100px;
+    text-shadow: 0 0 20px rgba(0, 255, 115, 0.6), 4px 4px 0 #FF00C8;
+    animation: floatTitle 2s infinite ease-in-out;
+}
+/* 6. BOTÓN FINAL (Más chico y controlado) */
+    .btn-accion {
+        font-size: 18px; /* Letra más chica */
+        padding: 15px 10px; /* Menos relleno lateral */
+        width: 80%; /* Ocupa el 80% del ancho de la pantalla */
+        max-width: 280px; /* Pero nunca más de 280px */
+        margin-top: 15px;
+    }
+
+/* 7. PANTALLA FINAL (CENTRADO VISUAL) */
+    /* Ajuste para que no quede abajo y llene el espacio negro de arriba */
+    #final {
+        margin-top: -100px; /* Subimos todo el bloque */
+    }
+
+    #titulo-final {
+        font-size: 60px; /* Achicamos el título para que entre mejor */
+        margin-bottom: 10px;
+    }
+
+    #texto-final {
+        font-size: 18px;
+        margin: 10px 0;
+        line-height: 1.3;
+    }
+
+    #puntaje-final {
+        font-size: 50px;
+        margin: 10px 0;
+    }
+
+}

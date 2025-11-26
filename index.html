@@ -10,50 +10,50 @@
 
 <body class="fondo-portada">
 
-    <!-- Decoración Portada -->
+    <div class="music-player-container" id="music-container">
+        <p class="music-text">¿Y si lo hacemos divertido<br>con un poco de música?<br>¡Hacé click acá!</p>
+        <img id="btn-musica-img" src="multimedia/play.png" class="music-icon" onclick="toggleMusica()">
+    </div>
+
     <img src="multimedia/manolata.png" class="decoracion img-manolata" id="decor-left">
     <img src="multimedia/sun.png" class="decoracion img-sun" id="decor-right">
 
     <div class="container">
 
-        <!-- PANTALLA 1: INICIO -->
         <section id="inicio" class="seccion activa">
             <h1 class="titulo-custom">¿CUÁNTO SABÉS<br>DE DR. LEMON?</h1>
 
             <div class="intro-box">
                 <p class="intro-text">
-                    <strong>¡Somos el sponsor oficial del festival más esperado del verano!</strong><br><br>
-                    Poné a prueba tu conocimiento y demostrá que sos parte de la vibra.<br>
-                    Si acertás al menos <strong>7 preguntas</strong> correctamente, te ganás un par de entradas para
-                    vivir el <strong>SunFest</strong> con tus amigos.<br><br>
-                    ¿Listo para jugar y brindar? 🍋💛
+                    <strong>¡Somos sponsor del festival del verano!</strong><br><br>
+                    Acertá <strong>7 preguntas</strong> y ganate entradas para el <strong>SunFest</strong>.<br><br>
+                    ¿Jugamos? 🍋💛
                 </p>
             </div>
 
             <button class="btn-accion" onclick="empezarJuego()">JUGAR AHORA</button>
         </section>
 
-        <!-- PANTALLA 2: JUEGO -->
         <section id="juego" class="seccion">
+            <div class="game-content-wrapper">
 
-            <!-- HEADER JUEGO -->
-            <div class="game-header">
-                <span class="header-txt txt-green">DR. LEMON</span>
-                <span class="header-txt txt-white">X</span>
-                <img src="multimedia/sunfest.png" alt="Sunfest" class="header-logo-img">
+                <div class="game-header">
+                    <span class="header-txt txt-green">DR. LEMON</span>
+                    <span class="header-txt txt-white">X</span>
+                    <img src="multimedia/sunfest.png" alt="Sunfest" class="header-logo-img">
+                </div>
+
+                <div id="pregunta-texto" class="question-bubble">Cargando...</div>
+
+                <div id="opciones-container" class="options-grid"></div>
+
+                <div id="mensaje-feedback" class="feedback-msg"></div>
+
             </div>
-
-            <!-- CONTADOR ELIMINADO AQUÍ -->
-
-            <div id="pregunta-texto" class="question-bubble">Cargando...</div>
-            <div id="opciones-container" class="options-grid"></div>
-            <div id="mensaje-feedback" class="feedback-msg"></div>
         </section>
 
-        <!-- PANTALLA 3: FINAL -->
         <section id="final" class="seccion">
             <h1 id="titulo-final"></h1>
-
             <p id="texto-final" class="intro-text" style="font-size: 22px; margin: 20px 0;"></p>
             <h2 id="puntaje-final"
                 style="font-size: 60px; color: #FFE600; margin: 20px 0; text-shadow: 0 0 10px #FF00C8;"></h2>
@@ -62,7 +62,6 @@
 
     </div>
 
-    <!-- ANIMACIÓN GANADORA -->
     <div id="animacion-ganadora" class="hidden">
         <div class="hand-container">
             <img src="multimedia/hand-holding.png" class="hand-img">
@@ -80,13 +79,23 @@
         audioIntro.loop = true;
         audioIntro.volume = 0.5;
 
-        document.addEventListener('click', function iniciarAudio() {
-            audioIntro.play().then(() => {
-                document.removeEventListener('click', iniciarAudio);
-            }).catch(e => {
-                console.log("Esperando clic para audio...");
-            });
-        });
+        let musicaSonando = false;
+
+        function toggleMusica() {
+            const btnImg = document.getElementById('btn-musica-img');
+
+            if (musicaSonando) {
+                audioIntro.pause();
+                btnImg.src = 'multimedia/play.png';
+                btnImg.classList.remove('music-playing');
+                musicaSonando = false;
+            } else {
+                audioIntro.play().catch(e => console.log("Interacción requerida"));
+                btnImg.src = 'multimedia/stop.png';
+                btnImg.classList.add('music-playing');
+                musicaSonando = true;
+            }
+        }
 
         audioCorrecto.volume = 0.5;
         audioError.volume = 0.4;
@@ -94,14 +103,16 @@
 
         // --- 2. BASE DE DATOS ---
         const baseDatos = [{
-                pregunta: "¿En qué año se lanzó por primera vez Dr. Lemon en Argentina?",
+                pregunta: "¿En qué año se lanza por primera vez Dr. Lemon en Argentina?",
+                /* CAMBIO A PRESENTE */
                 tipo: "texto",
                 opciones: ["2001", "1998", "2006"],
                 correcta: 1,
                 msgError: "Parece que te faltó una ronda de historia con limón 😉."
             },
             {
-                pregunta: "¿Cuál fue el primer sabor con el que se presentó Dr. Lemon?",
+                pregunta: "¿Cuál es el primer sabor con el que se presenta Dr. Lemon?",
+                /* CAMBIO A PRESENTE */
                 tipo: "imagen",
                 opciones: ["primersabor", "primersabor1", "primersabor2"],
                 correcta: 0,
@@ -109,6 +120,7 @@
             },
             {
                 pregunta: "¿Qué bebida alcohólica usa Dr. Lemon como base?",
+                /* YA ESTABA EN PRESENTE */
                 tipo: "texto",
                 opciones: ["Vodka", "Ron", "Whisky"],
                 correcta: 0,
@@ -116,6 +128,7 @@
             },
             {
                 pregunta: "¿Qué caracteriza a Dr. Lemon en comparación con otros tragos listos para tomar?",
+                /* YA ESTABA EN PRESENTE */
                 tipo: "texto",
                 opciones: ["Es 100% natural", "Es gasificada y lista para tomar", "No tiene alcohol"],
                 correcta: 1,
@@ -123,6 +136,7 @@
             },
             {
                 pregunta: "¿Cuál es la edición limitada?",
+                /* YA ESTABA EN PRESENTE */
                 tipo: "imagen",
                 opciones: ["edicionlimitada1", "edicionlimitada-correcta", "edicionlimitada2"],
                 correcta: 1,
@@ -130,6 +144,7 @@
             },
             {
                 pregunta: "¿Cuál es el público principal de Dr. Lemon?",
+                /* YA ESTABA EN PRESENTE */
                 tipo: "texto",
                 opciones: ["Jóvenes que disfrutan la música, las juntadas y los festivales", "Adultos mayores",
                     "Deportistas profesionales"
@@ -138,7 +153,8 @@
                 msgError: "Si no te gusta la música… este trago no es para vos 🎧."
             },
             {
-                pregunta: "¿Con qué artista colaboró Dr. Lemon?",
+                pregunta: "¿Con qué artista colabora Dr. Lemon?",
+                /* CAMBIO A PRESENTE */
                 tipo: "texto",
                 opciones: ["Tini", "Duki", "Lit Killah"],
                 correcta: 1,
@@ -146,6 +162,7 @@
             },
             {
                 pregunta: "¿Qué lema o concepto suele representar a la marca Dr. Lemon?",
+                /* YA ESTABA EN PRESENTE */
                 tipo: "texto",
                 opciones: ["“Compartí lo que te hace bien”", "“Siempre ready”", "“Una historia que inspira”"],
                 correcta: 1,
@@ -153,6 +170,7 @@
             },
             {
                 pregunta: "¿Cuál es el envase actual de Dr. Lemon?",
+                /* YA ESTABA EN PRESENTE */
                 tipo: "imagen",
                 opciones: ["envaseactual1", "envaseactual-correcta", "envaseactual2"],
                 correcta: 1,
@@ -160,6 +178,7 @@
             },
             {
                 pregunta: "¿De qué otro festival es sponsor Dr. Lemon?",
+                /* YA ESTABA EN PRESENTE */
                 tipo: "imagen",
                 opciones: ["cosquin", "lollapalooza", "oktober"],
                 correcta: 1,
@@ -173,22 +192,15 @@
         let falloEnEstaPregunta = false;
 
         function empezarJuego() {
-            let vol = audioIntro.volume;
-            const fadeOutInterval = setInterval(() => {
-                if (vol > 0.05) {
-                    vol -= 0.05;
-                    audioIntro.volume = vol;
-                } else {
-                    clearInterval(fadeOutInterval);
-                    audioIntro.pause();
-                    audioIntro.currentTime = 0;
-                }
-            }, 50);
-
+            // Ocultar elementos de portada
             document.body.classList.remove('fondo-portada');
             document.body.classList.add('fondo-juego');
             document.getElementById('decor-left').style.display = 'none';
             document.getElementById('decor-right').style.display = 'none';
+
+            // Aseguramos que el botón de música siga visible
+            document.getElementById('music-container').style.display = 'flex';
+
             cambiarPantalla('inicio', 'juego');
             cargarPregunta();
         }
@@ -197,13 +209,13 @@
             juegoTerminado = false;
             falloEnEstaPregunta = false;
             const datos = baseDatos[indiceActual];
-            // LINEA DEL CONTADOR ELIMINADA
             document.getElementById('pregunta-texto').innerText = datos.pregunta;
-            document.getElementById('mensaje-feedback').innerText = "";
+            const feedback = document.getElementById('mensaje-feedback');
+            feedback.innerText = ""; // Limpiar
+            feedback.style.opacity = "0"; // Ocultar visualmente
 
             const contenedor = document.getElementById('opciones-container');
             contenedor.innerHTML = '';
-
             contenedor.className = 'options-grid';
 
             if (datos.tipo === 'imagen') {
@@ -239,8 +251,11 @@
                 audioCorrecto.currentTime = 0;
                 audioCorrecto.play();
                 elemento.classList.add('correct');
+
+                // Feedback: Texto blanco limpio
                 feedback.innerText = "¡CORRECTO! 🎉";
-                feedback.style.color = "#00FF73";
+                feedback.style.color = "#FFF";
+                feedback.style.opacity = "1";
 
                 if (!falloEnEstaPregunta) {
                     puntaje++;
@@ -261,12 +276,18 @@
                 audioError.play();
                 elemento.classList.add('incorrect');
                 elemento.style.cursor = "not-allowed";
+
                 feedback.innerText = datos.msgError;
-                feedback.style.color = "#FF3434";
+                feedback.style.color = "#FFF";
+                feedback.style.opacity = "1";
             }
         }
 
         function terminarJuego() {
+            // APAGAR MÚSICA Y OCULTAR BOTÓN
+            document.getElementById('music-container').style.display = 'none';
+            audioIntro.pause();
+
             document.getElementById('juego').classList.remove('activa');
             const scoreDisplay = document.getElementById('puntaje-final');
             scoreDisplay.innerText = puntaje + "/10";

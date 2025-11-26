@@ -26,19 +26,72 @@ body {
     background-image: url('multimedia/background-preguntas.png');
 }
 
+/* --- CONTENEDOR PRINCIPAL --- */
 .container {
-    max-width: 900px;
-    margin: auto;
-    padding: 10px 20px;
-    text-align: center;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
     z-index: 10;
-    overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* --- REPRODUCTOR DE MÚSICA --- */
+.music-player-container {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: slideInDown 1s ease-out;
+}
+
+.music-icon {
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s;
+    filter: drop-shadow(0 0 5px rgba(0, 255, 115, 0.5));
+}
+
+.music-icon:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 15px rgba(0, 255, 115, 1));
+}
+
+.music-playing {
+    animation: heartbeat 1.5s infinite;
+}
+
+.music-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #FF4EDB;
+    font-weight: bold;
+    text-shadow: 0 0 2px #000;
+    text-align: left;
+    line-height: 1.2;
+}
+
+/* --- SECCIONES --- */
+.seccion {
+    display: none;
+    width: 100%;
+    max-width: 900px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.seccion.activa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* --- TÍTULO PORTADA --- */
@@ -48,7 +101,8 @@ body {
     font-size: 60px;
     line-height: 1;
     text-transform: uppercase;
-    margin-bottom: 40px;
+    text-align: center;
+    margin-bottom: 30px;
     text-shadow: 4px 4px 0px #FF00C8, 0 0 20px rgba(255, 230, 0, 0.5);
     transform: rotate(-2deg);
     animation: floatTitle 3s ease-in-out infinite;
@@ -60,46 +114,18 @@ body {
     }
 }
 
-@keyframes floatTitle {
-
-    0%,
-    100% {
-        transform: rotate(-2deg) translateY(0);
-    }
-
-    50% {
-        transform: rotate(-2deg) translateY(-10px);
-    }
-}
-
 /* --- INTRO BOX --- */
 .intro-box {
     background: rgba(0, 0, 0, 0.7);
     padding: 25px;
     border-radius: 20px;
-    margin: 20px auto;
+    margin: 10px auto;
     max-width: 650px;
+    width: 100%;
+    text-align: center;
     border: 3px solid #00FF73;
     box-shadow: 0 0 15px rgba(0, 255, 115, 0.3);
     animation: pulseGreen 2s infinite;
-}
-
-@keyframes pulseGreen {
-    0% {
-        box-shadow: 0 0 15px rgba(0, 255, 115, 0.3);
-        border-color: #00FF73;
-    }
-
-    50% {
-        box-shadow: 0 0 30px rgba(0, 255, 115, 0.8), inset 0 0 10px rgba(0, 255, 115, 0.5);
-        border-color: #80FFC0;
-        transform: scale(1.01);
-    }
-
-    100% {
-        box-shadow: 0 0 15px rgba(0, 255, 115, 0.3);
-        border-color: #00FF73;
-    }
 }
 
 .intro-text {
@@ -108,19 +134,21 @@ body {
     color: #eee;
 }
 
-/* --- DECORACIONES --- */
+/* --- DECORACIONES (FONDO) --- */
 .decoracion {
     position: absolute;
     z-index: 1;
     pointer-events: none;
 }
 
+/* MODIFICADO: Más sutil y "respirando" */
 .img-manolata {
-    left: -50px;
-    bottom: -20px;
-    width: 280px;
-    max-width: 35vw;
-    animation: slideInLeft 1s ease-out;
+    left: -20px;
+    bottom: -10px;
+    width: 220px; /* Más pequeño */
+    max-width: 30vw;
+    opacity: 1; /* Transparente */
+    animation: breathing 4s infinite ease-in-out; /* Animación de respiración */
 }
 
 .img-sun {
@@ -129,152 +157,19 @@ body {
     width: 150px;
     max-width: 25vw;
     animation: spin 20s linear infinite;
+    opacity: 1;
 }
 
-/* --- ELEMENTOS DEL JUEGO --- */
-.seccion {
-    display: none;
-    width: 100%;
-    animation: fadeIn 0.5s ease-in;
-}
-
-.seccion.activa {
-    display: block;
-}
-
-.btn-accion {
-    background: #00FF73;
-    color: #000;
-    border: none;
-    padding: 15px 50px;
-    font-size: 24px;
-    font-weight: 900;
-    text-transform: uppercase;
-    border-radius: 50px;
-    cursor: pointer;
-    margin-top: 20px;
-    box-shadow: 0 0 15px #00FF73;
-    transition: transform 0.2s;
-    animation: btnPulse 1.5s infinite;
-}
-
-.btn-accion:hover {
-    transform: scale(1.05);
-}
-
-.question-bubble {
-    background: #FFE600;
-    color: #000;
-    font-weight: bold;
-    padding: 20px;
-    border-radius: 20px;
-    font-size: 22px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 15px #FFE600;
-}
-
-.options-grid {
+/* --- WRAPPER DEL JUEGO --- */
+.game-content-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
-/* ESTILOS PARA OPCIONES DE TEXTO */
-.option {
-    background: #FF4EDB;
-    color: #fff;
-    padding: 15px;
-    border-radius: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s;
-}
-
-.option:hover {
-    transform: translateX(5px);
-    border-color: #fff;
-}
-
-.correct {
-    background: #00FF73 !important;
-    color: #000 !important;
-    box-shadow: 0 0 15px #00FF73;
-}
-
-.incorrect {
-    background: #FF3434 !important;
-    color: #fff !important;
-    opacity: 0.8;
-}
-
-/* --- ESTILOS NUEVOS: OPCIONES CON IMÁGENES (LATAS/LOGOS) --- */
-
-.options-grid.imagenes {
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-    gap: 25px;
-    flex-wrap: wrap;
-}
-
-.img-opcion {
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-    /* TAMAÑO AUMENTADO */
-    height: 230px;
-    width: auto;
-    object-fit: contain;
-
-    /* FONDO Y BORDE REDONDEADO (SUTIL INICIALMENTE) */
-    padding: 10px;
-    border-radius: 30px;
-    /* Borde radios como pediste */
-    background: rgba(218, 170, 14, 0.05);
-    /* Fondo casi invisible */
-    border: 1px solid transparent;
-    max-width: 200px;
-}
-
-/* Efecto POP al pasar el mouse */
-.img-opcion:hover {
-    transform: scale(1.15);
-    background: rgba(255, 255, 255, 0.15);
-    /* Se ilumina el fondo un poco */
-    box-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
-    /* Resplandor amarillo suave */
-}
-
-/* Cuando es correcta (NEON VERDE + BORDE REDONDEADO) */
-.img-opcion.correct {
-    background: rgba(0, 255, 115, 0.2);
-    /* Fondo verde transparente */
-    border: 3px solid #00FF73;
-    /* Borde neón */
-    box-shadow: 0 0 25px #00FF73, inset 0 0 15px rgba(0, 255, 115, 0.5);
-    /* Desenfoque gaussiano (glow) */
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    margin-top: -180px; /* Sube todo el bloque */
     transform: scale(1.1);
-}
-
-/* Cuando es incorrecta (ROJO y opaca) */
-.img-opcion.incorrect {
-    filter: grayscale(100%);
-    background: rgba(255, 52, 52, 0.2);
-    border: 3px solid #FF3434;
-    opacity: 0.7;
-    transform: scale(0.95);
-}
-
-
-.feedback-msg {
-    margin-top: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    min-height: 50px;
-    text-shadow: 0 0 5px #000;
 }
 
 /* --- HEADER DEL JUEGO --- */
@@ -282,17 +177,16 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 0px; /* Quitamos gap para juntarlos más */
     width: 100%;
-    flex-wrap: nowrap;
-    margin-bottom: -80px;
+    margin-bottom: 5px;
     position: relative;
     z-index: 2;
 }
 
 .header-txt {
     font-family: 'Lucidity', sans-serif;
-    font-size: 80px;
+    font-size: 90px;
     text-transform: uppercase;
     line-height: 1;
     white-space: nowrap;
@@ -305,32 +199,183 @@ body {
 
 .txt-white {
     color: #FFF;
-    font-size: 50px;
-    margin: 0 10px;
-    padding-left: 2rem;
+    font-size: 55px;
+    margin: 0 5px; /* Menos margen alrededor de la X */
+    padding-left: 0.5rem;
 }
 
 .header-logo-img {
-    height: 350px;
+    height: 380px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-    margin-left: -60px;
-    margin-right: -60px;
-    top: 20px;
+    
+    /* MODIFICADO: Márgenes para pegarlo al texto */
+    margin-left: -80px; /* Lo jalamos fuerte hacia la izquierda */
+    margin-right: -50px;
+    
     position: relative;
+    top: 25px;
     z-index: 1;
 }
 
-/* --- ESTILOS PANTALLA FINAL --- */
+/* --- PREGUNTA --- */
+.question-bubble {
+    background: #FFE600;
+    color: #000;
+    font-weight: bold;
+    padding: 20px;
+    border-radius: 20px;
+    font-size: 24px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px #FFE600;
+    width: 100%;
+    text-align: center;
+}
+
+/* --- OPCIONES --- */
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.option {
+    background: #FF4EDB;
+    color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.option:hover {
+    transform: translateX(5px);
+    border-color: #fff;
+}
+
+.options-grid.imagenes {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.img-opcion {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 250px;
+    width: auto;
+    object-fit: contain;
+    padding: 10px;
+    border-radius: 30px;
+    background: rgba(218, 170, 14, 0.05);
+    border: 1px solid transparent;
+    max-width: 220px;
+}
+
+.img-opcion:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
+}
+
+.correct {
+    background: #00FF73 !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px #00FF73;
+}
+
+.img-opcion.correct {
+    background: rgba(0, 255, 115, 0.2);
+    border: 3px solid #00FF73;
+    box-shadow: 0 0 25px #00FF73, inset 0 0 15px rgba(0, 255, 115, 0.5);
+    transform: scale(1.1);
+}
+
+.incorrect {
+    background: #FF3434 !important;
+    color: #fff !important;
+    opacity: 0.8;
+}
+
+.img-opcion.incorrect {
+    filter: grayscale(100%);
+    background: rgba(255, 52, 52, 0.2);
+    border: 3px solid #FF3434;
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+/* --- FEEDBACK --- */
+.feedback-msg {
+    margin-top: 30px; /* Separado y respirando */
+    font-size: 28px;
+    font-weight: 900;
+    min-height: 40px;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-align: center;
+    color: #FFF;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    display: inline-block;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.feedback-msg:not(:empty) {
+    opacity: 1;
+}
+
+/* --- BOTÓN ACCIÓN --- */
+.btn-accion {
+    background: #00FF73;
+    color: #000;
+    border: none;
+    padding: 15px 50px;
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 25px;
+    box-shadow: 0 0 15px #00FF73;
+    transition: transform 0.2s;
+    animation: btnPulse 1.5s infinite;
+}
+
+.btn-accion:hover {
+    transform: scale(1.05);
+}
+
+/* --- PANTALLA FINAL --- */
 #titulo-final {
     font-family: 'Lucidity', sans-serif;
     color: #00FF73;
     font-size: 150px;
     line-height: 0.9;
-    margin-bottom: 80px;
+    margin-bottom: 60px;
     text-shadow: 0 0 20px rgba(0, 255, 115, 0.6), 4px 4px 0 #FF00C8;
     animation: floatTitle 2s infinite ease-in-out;
+    text-align: center;
+}
+
+#texto-final {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#puntaje-final {
+    text-align: center;
+    margin: 20px 0;
 }
 
 /* --- ANIMACIÓN GANADORA --- */
@@ -374,197 +419,208 @@ body {
     transform: translateX(-50%);
     opacity: 0;
     animation: dropLemon 1s 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 106;
 }
 
-@keyframes handEnter {
-    to {
-        top: 0px;
-    }
+
+
+/* --- KEYFRAMES --- */
+@keyframes breathing {
+    0% { transform: scale(1); }   /* Quitamos opacity */
+    50% { transform: scale(1.05); } /* Quitamos opacity */
+    100% { transform: scale(1); }   /* Quitamos opacity */
 }
+
+
+
+@keyframes handEnter { to { top: 0px; } }
 
 @keyframes dropLemon {
-    0% {
-        top: -100px;
-        opacity: 0;
-        transform: translateX(-50%) rotate(0deg);
-    }
+    0% { top: -100px; opacity: 0; transform: translateX(-50%) rotate(0deg); }
+    20% { opacity: 1; }
+    80% { top: 90px; transform: translateX(-50%) rotate(360deg); }
+    100% { top: 80px; opacity: 1; transform: translateX(-50%) rotate(360deg); }
+}
 
-    20% {
-        opacity: 1;
-    }
+@keyframes floatTitle {
+    0%, 100% { transform: rotate(-2deg) translateY(0); }
+    50% { transform: rotate(-2deg) translateY(-10px); }
+}
 
-    80% {
-        top: 90px;
-        transform: translateX(-50%) rotate(360deg);
-    }
-
-    100% {
-        top: 80px;
-        opacity: 1;
-        transform: translateX(-50%) rotate(360deg);
-    }
+@keyframes pulseGreen {
+    0% { box-shadow: 0 0 15px rgba(0, 255, 115, 0.3); border-color: #00FF73; }
+    50% { box-shadow: 0 0 30px rgba(0, 255, 115, 0.8), inset 0 0 10px rgba(0, 255, 115, 0.5); border-color: #80FFC0; transform: scale(1.01); }
+    100% { box-shadow: 0 0 15px rgba(0, 255, 115, 0.3); border-color: #00FF73; }
 }
 
 @keyframes slideInLeft {
-    from {
-        transform: translateX(-200px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+    from { transform: translateX(-200px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
+@keyframes slideInDown {
+    from { transform: translateY(-100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 @keyframes btnPulse {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.05);
-    }
-
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* --- MEDIA QUERIES (MÓVIL) --- */
 @media (max-width: 768px) {
 
-    /* 1. AJUSTE DE LA PORTADA */
-    .titulo-custom {
-        font-size: 50px;
-        margin-bottom: 20px;
+    .container {
+        padding-bottom: 20px;
+        justify-content: center;
+        min-height: 100vh;
+        height: auto;
     }
 
-    .intro-box {
-        padding: 20px;
-        width: 85%;
+    /* --- AJUSTE ESPECIAL DE FONDO PORTADA (SUTIL Y BLURRY) --- */
+    .fondo-portada {
+        position: relative;
+        /* Quitamos la imagen directa del body para aplicarla en una capa separada */
+        background-image: none !important; 
+        background-color: #000; /* Fondo base negro para que no se vea vacío */
+        overflow: hidden; /* Para que la animación no cree scroll lateral */
     }
 
-    .intro-text {
-        font-size: 16px;
-    }
+    /* Creamos una capa "fantasma" solo para la imagen borrosa */
+    .fondo-portada::before {
+        content: "";
+        position: absolute;
+        top: 195px;
+        left: 10px;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Se asegura de estar DETRÁS del texto */
 
-    /* 2. AJUSTE DEL HEADER DEL JUEGO (VERTICAL) */
-    .game-header {
+        background-image: url('multimedia/background-preguntas.png');
+        background-size: 400%; /* Hacemos la imagen grande para que tenga recorrido al moverse */
+        
+        /* AQUÍ ESTÁ LA MAGIA QUE PEDISTE: */
+        opacity: 0.3;          /* Muy sutil (apenas se ve) */
+        filter: blur(8px);     /* Blurry (efecto niebla) */
+        
+        /* Movimiento lento y continuo */
+        animation: moveBackgroundSoft 20s ease-in-out infinite; 
+    }
+    /* --------------------------------------------------------- */
+
+    .game-content-wrapper {
+        margin-top: 0; 
+        transform: none;
+        width: 100%;
+        display: flex;
         flex-direction: column;
-        /* Quitamos márgenes grandes para que se pegue más a la pregunta */
-        margin-bottom: 5px; 
-        margin-top: 0px;
-        gap: 0px;
-    }
-
-    .header-txt {
-        font-size: 55px; 
-        text-align: center;
-    }
-
-    .txt-white {
-        font-size: 30px; 
-        margin: 0;
-        padding: 0;
-    }
-
-    .header-logo-img {
-        height: auto; 
-        width: 200px; 
-        max-width: 60%; 
-        margin: 0;
-        top: -65px;
-    }
-
-    /* 3. AJUSTE DE LAS PREGUNTAS - MÁS PEGADO ARRIBA */
-    .question-bubble {
-        font-size: 18px;
-        padding: 15px;
-        /* Reducimos el margen superior para que suba y se acerque al header */
-        margin-top: -120px; 
-        margin-bottom: 20px;
-    }
-
-    /* 4. OPCIONES DE IMÁGENES (LATAS) EN MÓVIL */
-    .options-grid.imagenes {
         gap: 15px;
     }
 
-    .img-opcion {
-        height: 130px; 
-        padding: 8px;
-        max-width: 45%; 
+    .music-player-container {
+        top: -10px;
+        left: 15px;
+        gap: 0;
+    }
+    .music-icon { width: 90px; }
+    .music-text { display: none; }
+
+    .titulo-custom {
+        font-size: 45px;
+        margin-bottom: 20px;
+        /* Aseguramos que el título resalte sobre el fondo borroso */
+        position: relative; 
+        z-index: 2; 
+    }
+    
+    .intro-box {
+        padding: 20px;
+        width: 90%;
+        margin-top: 0;
+        position: relative;
+        z-index: 2;
+    }
+    .intro-text { font-size: 16px; }
+
+    .game-header {
+        flex-direction: column;
+        margin-bottom: 15px;
+        margin-top: 10px;
+        gap: 5px;
     }
 
-    /* 5. DECORACIONES (Fondo) */
-    /* Mantenemos las nubes en su lugar (absolute bottom) */
-    .img-manolata {
-        width: 150px;
-        left: -30px;
-        bottom: -10px;
-        opacity: 0.5;
+    .header-txt { font-size: 50px; }
+    .txt-white { font-size: 30px; margin: 0; padding: 0; }
+
+    .header-logo-img {
+        width: 230px;
+        height: auto;
+        margin: 0;
+        top: -70px; 
+        right: 0;
+        position: relative;
     }
 
-    .img-sun {
-        width: 90px;
-        top: 10px;
-    }
-
-    /* --- ESTILOS PANTALLA FINAL --- */
-#titulo-final {
-    font-family: 'Lucidity', sans-serif;
-    color: #00FF73;
-    font-size: 80px;
-    line-height: 0.9;
-    margin-bottom: 100px;
-    text-shadow: 0 0 20px rgba(0, 255, 115, 0.6), 4px 4px 0 #FF00C8;
-    animation: floatTitle 2s infinite ease-in-out;
-}
-/* 6. BOTÓN FINAL (Más chico y controlado) */
-    .btn-accion {
-        font-size: 18px; /* Letra más chica */
-        padding: 15px 10px; /* Menos relleno lateral */
-        width: 80%; /* Ocupa el 80% del ancho de la pantalla */
-        max-width: 280px; /* Pero nunca más de 280px */
-        margin-top: 15px;
-    }
-
-/* 7. PANTALLA FINAL (CENTRADO VISUAL) */
-    /* Ajuste para que no quede abajo y llene el espacio negro de arriba */
-    #final {
-        margin-top: -100px; /* Subimos todo el bloque */
-    }
-
-    #titulo-final {
-        font-size: 60px; /* Achicamos el título para que entre mejor */
-        margin-bottom: 10px;
-    }
-
-    #texto-final {
+    .question-bubble{
         font-size: 18px;
-        margin: 10px 0;
-        line-height: 1.3;
+        padding: 15px;
+        width: 90%;
+        position: relative; 
+        top: -160px;
     }
 
-    #puntaje-final {
-        font-size: 50px;
-        margin: 10px 0;
+    .options-grid {
+        margin-top: -160px; 
+        margin-bottom: 0;
+        gap: 10px;
+        width: 100%;
     }
 
+    .option {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .options-grid.imagenes {
+        gap: 10px;
+        justify-content: center;
+    }
+    .img-opcion {
+        height: 100px;
+        max-width: 45%;
+        padding: 5px;
+    }
+
+    .feedback-msg {
+        font-size: 18px;
+        margin-top: 15px;
+        padding: 10px 20px;
+    }
+
+    #titulo-final { font-size: 50px; margin-bottom: 20px; }
+    #puntaje-final { font-size: 40px; margin: 10px 0; }
+    #texto-final { font-size: 18px; }
+
+    .btn-accion {
+        font-size: 18px;
+        padding: 12px 30px;
+        width: 80%;
+        position: relative;
+        z-index: 2;
+    }
+
+    .img-manolata { width: 120px; opacity: 0.5; bottom: 0; left: -20px; }
+    .img-sun { width: 70px; top: 10px; right: 10px; }
 }
